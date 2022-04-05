@@ -1,14 +1,16 @@
 const myModal = new bootstrap.Modal("#transaction-modal");
 let logged = sessionStorage.getItem("logged");
 const session = localStorage.getItem("session");
-
+let cashIn = [];
+let cashOut = [];
 let data =  {
     trasactions: []
 };
-document.getElementById("button-logout").addEventListener("click" , logout);
+checkLogged();
+document.getElementById("logout-button").addEventListener("click" , logout);
 document.getElementById("transactions-button").addEventListener("click" , function(){
-    window.location.href = "transactions.html"
-});
+    window.location.href = "transactions.html";
+    });
 
 
 
@@ -37,27 +39,17 @@ document.getElementById("transaction-form").addEventListener("submit" , function
     alert("Lançamento adicionado com sucesso");
 });
 
-
-
-
-
-
-
-
-
-checkLogged();
-
-//function checkLogged(){
-//    if(session){
-//        sessionStorage.setItem("logged" , session);
-//       logged = session;
-//    }
-//   if (!logged) {
-//        
-//        window.location.href = "index.html";
-//        return;
-//   }
-//  const dataUser = localStorage.getItem(logged);
+function checkLogged();{
+  if(session){
+       sessionStorage.setItem("logged" , session);
+      logged = session;
+   }
+  if (!logged) {
+        
+      window.location.href = 'index.html' ;
+        
+   }
+  const dataUser = localStorage.getItem(logged);
     if (dataUser) {
         data =JSON.parse(dataUser);
 
@@ -65,15 +57,7 @@ checkLogged();
     getCashIn();
     getCashOut();
     getTotal();
-//
-//
-//
-//
-//
-//    
-//
-//
-//}
+}
 
 function logout() {
     sessionStorage.removeItem("logged");
@@ -82,7 +66,7 @@ function logout() {
 }
 
 function getCashIn(){
-    const transactions = data.trasactions;
+    const transactions = data.transactions;
 
     const cashIn = transactions.filter((item) => item.type === "1");
 
@@ -108,7 +92,7 @@ function getCashIn(){
                             <p>${ cashIn[index].description}</p>                                                        
                         </div>
                         <div class="col-12 col-md-3 d-flex justify-content-end">
-                            1${cashIn[index.date]}
+                        <span>${cashIn[index].date}</span> 
                         </div>                                                
                     </div>
                 </div>
@@ -125,33 +109,33 @@ function getCashIn(){
 
 
 function getCashOut(){
-    const transactions = data.trasactions;
+    const transactions = data.transactions;
 
-    const cashIn = transactions.filter((item) => item.type === "2");
+    const cashOut = transactions.filter((item) => item.type === "2");
 
     if (cashIn.length){
-        let cashInHtml = ``;
+        let cashOutHtml = ``;
         let limit = 0;
 
-        if (cashIn.length > 5){
+        if (cashOut.length > 5){
             limit = 5;        
         }else{
-            limit = cashIn.length;
+            limit = cashOut.length;
         }
     }
 
     for (let index = 0; index < limit; index++) {
-        cashInHtml +=`
+        cashOutHtml +=`
         <div class="row mb-4">
             <div class="col-12">
-                <h3 class="fs-2">${cashIn[index].value.toFixed(2)}</h3>
+                <h3 class="fs-2">${cashOut[index].value.toFixed(2)}</h3>
                 <div class="container p-0">
                     <div class="row">
                         <div class="col-12 col-md-8">
-                            <p>${ cashIn[index].description}</p>                                                        
+                            <p>${ cashOut[index].description}</p>                                                        
                         </div>
                         <div class="col-12 col-md-3 d-flex justify-content-end">
-                            1${cashIn[index.date]}
+                        <span>${cashOut[index].date}</span>
                         </div>                                                
                     </div>
                 </div>
@@ -160,7 +144,7 @@ function getCashOut(){
         
         `       
     }
-    document.getElementByIdO("cash-out-list").innerHTML = cashInHtml;
+    document.getElementById("cash-out-list").innerHTML = cashOutHtml;
    
 
 

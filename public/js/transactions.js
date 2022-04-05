@@ -5,7 +5,7 @@ const session = localStorage.getItem("session");
 let data =  {
     trasactions: []
 };
-
+checkLogged();
 document.getElementById("button-logout").addEventListener("click" , logout);
 
 //ADICIONAR LANÇAMENTO
@@ -31,25 +31,23 @@ document.getElementById("transaction-form").addEventListener("submit" , function
 });
 
 
-checkLogged();
-
-//function checkLogged(){
-//    if(session){
-//        sessionStorage.setItem("logged" , session);
-//       logged = session;
-//    }
-//   if (!logged) {
-//        
-//        window.location.href = "index.html";
-//        return;
-//   }
-//  const dataUser = localStorage.getItem(logged);
+function checkLogged(){
+    if(session){
+        sessionStorage.setItem("logged" , session);
+       logged = session;
+    }
+   if (!logged) {
+        
+       window.location.href = "index.html";
+        return;
+   }
+  const dataUser = localStorage.getItem(logged);
     if (dataUser) {
         data =JSON.parse(dataUser);
 
     }
     getTransactions();
-//}
+}
 
 
 
@@ -62,7 +60,7 @@ function logout() {
 
 function getTransactions() {
     const transactions = data.transactions;
-    let transactionsHtml = `    `;
+    let transactionsHtml = ` `;
     if (transactions.length) {
         transactions.forEach((item) => {
             let type = "Entrada";
@@ -75,12 +73,12 @@ function getTransactions() {
                 <td>${item.value.toFixed(2)}</td>
                 <td>${type}</td>
                 <td>${item.description}</td>
-          </tr> `
+          </tr> ` ; 
 
-        })
-    }
+        });
+    
     document.getElementById("transactions-list").innerHTML = transactionsHtml;
-}
+}}
 
 function saveData(data) {
     localStorage.setItem(data.login, JSON.stringify(data));
